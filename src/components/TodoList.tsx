@@ -1,10 +1,16 @@
 import { Box, List, Typography } from '@mui/material'
-import { useTodoStore } from '../store/todoStore'
+import type { Todo } from '../types/todo'
 import { TodoItem } from './TodoItem'
 
-export function TodoList() {
-  const todos = useTodoStore((state) => state.todos)
+interface TodoListProps {
+  todos: Todo[]
+  emptyMessage?: string
+}
 
+export function TodoList({
+  todos,
+  emptyMessage = 'Задач пока нет',
+}: TodoListProps) {
   if (todos.length === 0) {
     return (
       <Box
@@ -17,7 +23,7 @@ export function TodoList() {
           borderRadius: 1,
         }}
       >
-        <Typography>Задач пока нет</Typography>
+        <Typography>{emptyMessage}</Typography>
       </Box>
     )
   }
