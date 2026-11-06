@@ -1,32 +1,88 @@
-# React + TypeScript + Vite
+# To-Do List
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
-Currently, two official plugins are available:
+**Демо:** https://test-todo-list.olegvolobuev97.workers.dev/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Возможности
 
-## React Compiler
+- Добавление задачи через форму (по кнопке или клавише `Enter`).
+- Ограничение длины названия — до 300 символов.
+- Отметка задачи как выполненной / невыполненной (чекбокс).
+- Удаление задачи.
+- Сортировка по дате добавления: «Сначала новые» / «Сначала старые».
+- Фильтр «Скрыть выполненные».
+- Счётчик оставшихся задач.
+- Адаптивная вёрстка для мобильных и десктопных экранов.
+- Сохранение задач в `localStorage` с версионированием и миграциями схемы.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Стек
 
-## Expanding the Oxlint configuration
+- **React 19** + **TypeScript**
+- **Vite** — сборка и dev-сервер
+- **Zustand** (`persist`) — состояние и синхронизация с `localStorage`
+- **Material UI (MUI)** — интерфейс
+- **Oxlint** — линтинг
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Требования
+
+- Node.js 20+
+- npm 10+
+
+## Локальный запуск
+
+```bash
+# 1. Установить зависимости
+npm install
+
+# 2. Запустить dev-сервер с hot-reload
+npm run dev
+```
+
+Приложение будет доступно по адресу http://localhost:5173.
+
+### Остальные команды
+
+```bash
+# Проверка типов и production-сборка в ./dist
+npm run build
+
+# Локальный просмотр production-сборки (http://localhost:4173)
+npm run preview
+
+# Линтинг
+npm run lint
+```
+
+## Структура проекта
+
+```
+src/
+├── components/
+│   ├── TodoForm.tsx      # форма добавления задачи
+│   ├── TodoItem.tsx      # одна задача: чекбокс, текст, удаление
+│   ├── TodoList.tsx      # список задач и пустое состояние
+│   └── TodoControls.tsx  # сортировка и фильтр выполненных
+├── store/
+│   ├── todoStore.ts      # Zustand store + persist
+│   └── migrations.ts     # версия схемы и миграции localStorage
+├── types/
+│   └── todo.ts           # типы Todo и TodoState
+├── constants.ts          # общие константы (макс. длина названия)
+├── theme.ts              # тема MUI
+├── App.tsx               # компоновка экрана
+├── main.tsx              # точка входа, ThemeProvider, CssBaseline
+└── index.css             # глобальные стили
+```
+
+Логика изменения данных находится в store, компоненты отвечают за отображение и ввод. Настройки сортировки и фильтра — это UI-состояние, оно не сохраняется между перезагрузками.
+
+## Хранение данных
+
+Задачи сохраняются в `localStorage` под ключом `todo-storage`:
 
 ```json
 {
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
+  "state": { "todos": [] },
+  "version": 1
 }
 ```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
