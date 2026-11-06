@@ -1,3 +1,4 @@
+import { MAX_TODO_TITLE_LENGTH } from '../constants'
 import type { Todo } from '../types/todo'
 
 export const STORAGE_VERSION = 1
@@ -13,7 +14,10 @@ function normalizeTodos(value: unknown): Todo[] {
     if (typeof item !== 'object' || item === null) return []
 
     const todo = item as Partial<Todo>
-    const title = typeof todo.title === 'string' ? todo.title.trim() : ''
+    const title =
+      typeof todo.title === 'string'
+        ? todo.title.trim().slice(0, MAX_TODO_TITLE_LENGTH)
+        : ''
     if (!title) return []
 
     return [

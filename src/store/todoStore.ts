@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { MAX_TODO_TITLE_LENGTH } from '../constants'
 import type { TodoState } from '../types/todo'
 import { migrateTodos, STORAGE_VERSION } from './migrations'
 
@@ -9,7 +10,7 @@ export const useTodoStore = create<TodoState>()(
       todos: [],
 
       addTodo: (title) => {
-        const trimmed = title.trim()
+        const trimmed = title.trim().slice(0, MAX_TODO_TITLE_LENGTH)
         if (!trimmed) return
 
         set((state) => ({
